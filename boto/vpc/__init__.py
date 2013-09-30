@@ -338,7 +338,7 @@ class VPCConnection(EC2Connection):
         return self.get_status('ReplaceRouteTableAssociation', params)
 
     def create_route(self, route_table_id, destination_cidr_block,
-                     gateway_id=None, instance_id=None, dry_run=False):
+                     gateway_id=None, instance_id=None, interface_id=None, dry_run=False):
         """
         Creates a new route in the route table within a VPC. The route's target
         can be either a gateway attached to the VPC or a NAT instance in the
@@ -356,6 +356,9 @@ class VPCConnection(EC2Connection):
 
         :type instance_id: str
         :param instance_id: The ID of a NAT instance in your VPC.
+        
+        :type interface_id: str
+        :param interface_id: The ID of a Elastic Network Interface instance in your VPC.
 
         :type dry_run: bool
         :param dry_run: Set to True if the operation should not actually run.
@@ -372,6 +375,8 @@ class VPCConnection(EC2Connection):
             params['GatewayId'] = gateway_id
         elif instance_id is not None:
             params['InstanceId'] = instance_id
+        elif interface_id is not None:
+            params['NetworkInterfaceId'] = interface_id
         if dry_run:
             params['DryRun'] = 'true'
 
